@@ -1,26 +1,50 @@
-# Package Typescript Test
+# Package Logger
 
-This package provides Jest configuration and test packages for TypeScript projects.
+A TypeScript-based logging utility designed with clean architecture principles, providing flexible and extensible logging capabilities for Node.js applications.
+
+## Features
+
+- 📝 Type-safe logging interface
+- 🔌 Pluggable logging adapters
+- 💪 100% TypeScript
 
 ## Installation
 
-Install the package using npm:
-
 ```bash
-npm install @jterrazz/test --save-dev
+npm install @jterrazz/logger
 ```
 
 ## Usage
 
-1. Create a Jest configuration file (e.g., `jest.config.js`) in your project root:
+```typescript
+import { Logger } from '@jterrazz/logger';
 
-```javascript
-// jest.config.js
-import { jestConfig } from '@jterrazz/package-typescript-test';
+// Initialize the logger with your preferred adapter
+const logger = new Logger({
+  // Configuration options
+});
 
-export default jestConfig();
+// Log messages
+logger.info('Application started');
+logger.error('An error occurred', { error: new Error('Something went wrong') });
 ```
 
-2. You can now test your TypeScript project!
+## Architecture
 
-Happy testing! 🚀
+This package follows the hexagonal (ports and adapters) architecture:
+
+- `src/ports/`: Contains the core interfaces and types
+- `src/adapters/`: Implements various logging adapters (console, file, etc.)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## Author
+
+- Jean-Baptiste Terrazzoni ([@jterrazz](https://github.com/jterrazz))
+- Email: contact@jterrazz.com
