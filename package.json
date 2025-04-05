@@ -21,7 +21,7 @@
   "devDependencies": {
     "@jterrazz/quality": "^2.0.3",
     "@jterrazz/test": "^2.0.3",
-    "@jterrazz/typescript": "^2.0.3",
+    "@jterrazz/typescript": "^2.0.4",
     "@types/pino": "^7.0.4"
   },
   "dependencies": {
