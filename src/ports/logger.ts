@@ -21,4 +21,9 @@ export interface LoggerPort {
      * Log a debug message
      */
     debug(message: string, context?: Record<string, unknown>): void;
+
+    /**
+     * Create a child logger with specific bindings
+     */
+    child(bindings: Record<string, unknown>): LoggerPort;
 }
