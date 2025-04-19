@@ -6,7 +6,11 @@ import { LoggerPort } from '../ports/logger.js';
  * to minimize overhead.
  */
 export class NoopLoggerAdapter implements LoggerPort {
-    info(_message: string, _context?: Record<string, unknown>): void {
+    child(_bindings: Record<string, unknown>): LoggerPort {
+        return this;
+    }
+
+    debug(_message: string, _context?: Record<string, unknown>): void {
         // No operation
     }
 
@@ -14,15 +18,11 @@ export class NoopLoggerAdapter implements LoggerPort {
         // No operation
     }
 
+    info(_message: string, _context?: Record<string, unknown>): void {
+        // No operation
+    }
+
     warn(_message: string, _context?: Record<string, unknown>): void {
         // No operation
-    }
-
-    debug(_message: string, _context?: Record<string, unknown>): void {
-        // No operation
-    }
-
-    child(_bindings: Record<string, unknown>): LoggerPort {
-        return this;
     }
 }

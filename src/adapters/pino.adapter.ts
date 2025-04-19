@@ -7,8 +7,8 @@ export class PinoLoggerAdapter implements LoggerPort {
 
     constructor(
         private readonly config: {
-            prettyPrint: boolean;
             level: string;
+            prettyPrint: boolean;
         },
     ) {
         const transport = this.config.prettyPrint
@@ -35,6 +35,28 @@ export class PinoLoggerAdapter implements LoggerPort {
         });
     }
 
+    child(bindings: Record<string, unknown>): LoggerPort {
+        const childLogger = new PinoLoggerAdapter(this.config);
+        childLogger.logger = this.logger.child(bindings);
+        return childLogger;
+    }
+
+    debug(message: string, context?: Record<string, unknown>): void {
+        this.logger.debug(this.formatContext(context), message);
+    }
+
+    error(message: string, context?: Record<string, unknown>): void {
+        this.logger.error(this.formatContext(context), message);
+    }
+
+    info(message: string, context?: Record<string, unknown>): void {
+        this.logger.info(this.formatContext(context), message);
+    }
+
+    warn(message: string, context?: Record<string, unknown>): void {
+        this.logger.warn(this.formatContext(context), message);
+    }
+
     private formatContext(context?: Record<string, unknown>): Record<string, unknown> {
         if (!context) return {};
 
@@ -54,27 +76,5 @@ export class PinoLoggerAdapter implements LoggerPort {
         return {
             context,
         };
-    }
-
-    info(message: string, context?: Record<string, unknown>): void {
-        this.logger.info(this.formatContext(context), message);
-    }
-
-    error(message: string, context?: Record<string, unknown>): void {
-        this.logger.error(this.formatContext(context), message);
-    }
-
-    warn(message: string, context?: Record<string, unknown>): void {
-        this.logger.warn(this.formatContext(context), message);
-    }
-
-    debug(message: string, context?: Record<string, unknown>): void {
-        this.logger.debug(this.formatContext(context), message);
-    }
-
-    child(bindings: Record<string, unknown>): LoggerPort {
-        const childLogger = new PinoLoggerAdapter(this.config);
-        childLogger.logger = this.logger.child(bindings);
-        return childLogger;
     }
 }

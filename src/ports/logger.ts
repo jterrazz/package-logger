@@ -3,19 +3,9 @@
  */
 export interface LoggerPort {
     /**
-     * Log an informational message
+     * Create a child logger with specific bindings
      */
-    info(message: string, context?: Record<string, unknown>): void;
-
-    /**
-     * Log an error message
-     */
-    error(message: string, context?: Record<string, unknown>): void;
-
-    /**
-     * Log a warning message
-     */
-    warn(message: string, context?: Record<string, unknown>): void;
+    child(bindings: Record<string, unknown>): LoggerPort;
 
     /**
      * Log a debug message
@@ -23,7 +13,17 @@ export interface LoggerPort {
     debug(message: string, context?: Record<string, unknown>): void;
 
     /**
-     * Create a child logger with specific bindings
+     * Log an error message
      */
-    child(bindings: Record<string, unknown>): LoggerPort;
+    error(message: string, context?: Record<string, unknown>): void;
+
+    /**
+     * Log an informational message
+     */
+    info(message: string, context?: Record<string, unknown>): void;
+
+    /**
+     * Log a warning message
+     */
+    warn(message: string, context?: Record<string, unknown>): void;
 }
