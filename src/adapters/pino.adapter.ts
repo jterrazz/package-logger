@@ -7,6 +7,7 @@ export class PinoLoggerAdapter implements LoggerPort {
 
     constructor(
         private readonly config: {
+            destination?: pino.DestinationStream;
             level: string;
             prettyPrint: boolean;
         },
@@ -26,13 +27,16 @@ export class PinoLoggerAdapter implements LoggerPort {
               }
             : undefined;
 
-        this.logger = pino({
-            formatters: {
-                level: (label) => ({ level: label }),
+        this.logger = pino(
+            {
+                formatters: {
+                    level: (label) => ({ level: label }),
+                },
+                level: this.config.level,
+                transport,
             },
-            level: this.config.level,
-            transport,
-        });
+            this.config.destination,
+        );
     }
 
     child(bindings: Record<string, unknown>): LoggerPort {
