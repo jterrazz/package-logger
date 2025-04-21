@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   verify:
-    uses: ./.github/workflows/reusable/verify.yml
+    uses: ./.github/workflows/base-verify.yml
 
   publish:
     name: Publish
