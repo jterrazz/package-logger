@@ -1,6 +1,11 @@
 /**
  * Logger port - defines how to log messages with different severity levels
  */
+import { z } from 'zod';
+
+export const LoggerLevelSchema = z.enum(['debug', 'info', 'warn', 'error', 'silent']);
+export type LoggerLevel = z.infer<typeof LoggerLevelSchema>;
+
 export interface LoggerPort {
     /**
      * Create a child logger with specific bindings

@@ -1,6 +1,6 @@
 import pino from 'pino';
 
-import { type LoggerPort } from '../ports/logger.js';
+import { type LoggerLevel, type LoggerPort } from '../ports/logger.js';
 
 export class PinoLoggerAdapter implements LoggerPort {
     private logger: pino.Logger;
@@ -8,7 +8,7 @@ export class PinoLoggerAdapter implements LoggerPort {
     constructor(
         private readonly config: {
             destination?: pino.DestinationStream;
-            level: string;
+            level: LoggerLevel;
             prettyPrint: boolean;
         },
     ) {

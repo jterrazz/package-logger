@@ -1,7 +1,7 @@
 {
   "name": "@jterrazz/logger",
   "author": "Jean-Baptiste Terrazzoni <contact@jterrazz.com>",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
@@ -14,18 +14,19 @@
   "type": "module",
   "scripts": {
     "build": "ts-compile",
-    "test": "jest",
+    "test": "vitest",
     "lint": "code-standards"
   },
   "devDependencies": {
-    "@jterrazz/quality": "^2.2.0",
-    "@jterrazz/test": "^2.0.3",
-    "@jterrazz/typescript": "^2.0.6",
+    "@jterrazz/quality": "^2.2.1",
+    "@jterrazz/test": "^3.0.0",
+    "@jterrazz/typescript": "^2.3.4",
     "@types/pino": "^7.0.5"
   },
   "dependencies": {
     "pino": "^9.6.0",
-    "pino-pretty": "^13.0.0"
+    "pino-pretty": "^13.0.0",
+    "zod": "^3.24.3"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
