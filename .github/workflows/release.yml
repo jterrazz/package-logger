@@ -9,12 +9,13 @@ permissions:
   id-token: write
 
 jobs:
-  verify:
+  quality:
+    name: Quality
     uses: ./.github/workflows/base-quality.yml
 
   publish:
     name: Publish
-    needs: verify
+    needs: quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
