@@ -1,4 +1,4 @@
-name: Verify Package
+name: Quality Base
 
 on:
   workflow_call:
