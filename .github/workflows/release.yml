@@ -1,4 +1,4 @@
-name: Publish NPM Package
+name: Release
 
 on:
   release:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   verify:
-    uses: ./.github/workflows/base-verify.yml
+    uses: ./.github/workflows/base-quality.yml
 
   publish:
     name: Publish
@@ -34,5 +34,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
       - name: Verify published package
         run: |
+          PKG_NAME=$(npm pkg get name | tr -d '"')
+          PKG_VERSION=$(npm pkg get version | tr -d '"')
           npm pack --dry-run
-          npm view ${{ env.npm_package_name }}@${{ env.npm_package_version }}
+          npm view ${PKG_NAME}@${PKG_VERSION}
