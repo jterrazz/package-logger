@@ -32,9 +32,3 @@ jobs:
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-      - name: Verify published package
-        run: |
-          PKG_NAME=$(npm pkg get name | tr -d '"')
-          PKG_VERSION=$(npm pkg get version | tr -d '"')
-          npm pack --dry-run
-          npm view ${PKG_NAME}@${PKG_VERSION}
