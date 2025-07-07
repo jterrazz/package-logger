@@ -1,5 +1,6 @@
 import type { Colorette } from 'colorette';
 import pino from 'pino';
+import pretty from 'pino-pretty';
 
 import { type LoggerLevel, type LoggerPort } from '../ports/logger.js';
 
@@ -13,36 +14,47 @@ export class PinoLoggerAdapter implements LoggerPort {
             prettyPrint: boolean;
         },
     ) {
-        const transport = this.config.prettyPrint
-            ? {
-                  options: {
-                      colorize: true,
-                      customPrettifiers: {
-                          human: (
-                              human: unknown,
-                              _key: string,
-                              _log: Record<string, unknown>,
-                              { colors }: { colors: Colorette },
-                          ): string => {
-                              return colors.blue(String(human));
-                          },
-                          level: (
-                              _logLevel: unknown,
-                              _key: string,
-                              _log: Record<string, unknown>,
-                              { label, labelColorized }: { label: string; labelColorized: string },
-                          ): string => {
-                              const paddedLabel = label.padEnd(5);
-                              return labelColorized.replace(label, paddedLabel);
-                          },
+        // Configure destination stream
+        const destination: pino.DestinationStream | undefined = this.config.prettyPrint
+            ? pretty({
+                  colorize: true,
+                  customPrettifiers: {
+                      human: (
+                          human: unknown,
+                          _key: string,
+                          _log: object,
+                          { colors }: Record<string, unknown> & { colors: Colorette },
+                      ): string => colors.italic(String(human)),
+                      key: (
+                          human: unknown,
+                          _key: string,
+                          _log: object,
+                          { colors }: Record<string, unknown> & { colors: Colorette },
+                      ): string => colors.italic(String(human)),
+                      level: (
+                          _logLevel: unknown,
+                          _key: string,
+                          _log: object,
+                          extras: Record<string, unknown> & { colors: Colorette },
+                      ): string => {
+                          const {
+                              colors,
+                              label = '',
+                              labelColorized = '',
+                          } = extras as unknown as {
+                              colors: Colorette;
+                              label: string;
+                              labelColorized: string;
+                          };
+                          const paddedLabel = label.padEnd(5);
+                          return colors.blue(labelColorized.replace(label, paddedLabel));
                       },
-                      ignore: 'pid,hostname',
-                      levelFirst: true,
-                      translateTime: 'HH:MM:ss',
                   },
-                  target: 'pino-pretty',
-              }
-            : undefined;
+                  ignore: 'pid,hostname',
+                  levelFirst: true,
+                  translateTime: 'HH:MM:ss',
+              })
+            : this.config.destination;
 
         this.logger = pino(
             {
@@ -50,9 +62,8 @@ export class PinoLoggerAdapter implements LoggerPort {
                     level: (label) => ({ level: label }),
                 },
                 level: this.config.level,
-                transport,
             },
-            this.config.destination,
+            destination,
         );
     }
 

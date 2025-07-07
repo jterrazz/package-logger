@@ -1,7 +1,7 @@
 {
   "name": "@jterrazz/logger",
   "author": "Jean-Baptiste Terrazzoni <contact@jterrazz.com>",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
