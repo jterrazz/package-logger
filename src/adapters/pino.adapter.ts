@@ -1,3 +1,4 @@
+import type { Colorette } from 'colorette';
 import pino from 'pino';
 
 import { type LoggerLevel, type LoggerPort } from '../ports/logger.js';
@@ -16,11 +17,27 @@ export class PinoLoggerAdapter implements LoggerPort {
             ? {
                   options: {
                       colorize: true,
-                      colorizeObjects: false,
+                      customPrettifiers: {
+                          human: (
+                              human: unknown,
+                              _key: string,
+                              _log: Record<string, unknown>,
+                              { colors }: { colors: Colorette },
+                          ): string => {
+                              return colors.blue(String(human));
+                          },
+                          level: (
+                              _logLevel: unknown,
+                              _key: string,
+                              _log: Record<string, unknown>,
+                              { label, labelColorized }: { label: string; labelColorized: string },
+                          ): string => {
+                              const paddedLabel = label.padEnd(5);
+                              return labelColorized.replace(label, paddedLabel);
+                          },
+                      },
                       ignore: 'pid,hostname',
                       levelFirst: true,
-                      messageFormat: false,
-                      singleLine: true,
                       translateTime: 'HH:MM:ss',
                   },
                   target: 'pino-pretty',
