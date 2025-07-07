@@ -38,74 +38,74 @@ describe('PinoLoggerAdapter', () => {
         it('should format debug logs correctly', async () => {
             // Given
             const message = 'Test debug message';
-            const context = { userId: 123 };
+            const meta = { userId: 123 };
 
             // When
-            logger.debug(message, context);
+            logger.debug(message, meta);
             await waitForLogs();
 
             // Then
             expect(output.length).toBeGreaterThan(0);
             const logOutput = JSON.parse(output[0]) as {
-                context: { userId: number };
                 level: string;
+                meta: { userId: number };
                 msg: string;
             };
             expect(logOutput.level).toBe('debug');
             expect(logOutput.msg).toBe(message);
-            expect(logOutput.context).toEqual({ userId: 123 });
+            expect(logOutput.meta).toEqual({ userId: 123 });
         });
 
         it('should format info logs correctly', async () => {
             // Given
             const message = 'Test info message';
-            const context = { action: 'create' };
+            const meta = { action: 'create' };
 
             // When
-            logger.info(message, context);
+            logger.info(message, meta);
             await waitForLogs();
 
             // Then
             expect(output.length).toBeGreaterThan(0);
             const logOutput = JSON.parse(output[0]) as {
-                context: { action: string };
                 level: string;
+                meta: { action: string };
                 msg: string;
             };
             expect(logOutput.level).toBe('info');
             expect(logOutput.msg).toBe(message);
-            expect(logOutput.context).toEqual({ action: 'create' });
+            expect(logOutput.meta).toEqual({ action: 'create' });
         });
 
         it('should format warn logs correctly', async () => {
             // Given
             const message = 'Test warning message';
-            const context = { severity: 'high' };
+            const meta = { severity: 'high' };
 
             // When
-            logger.warn(message, context);
+            logger.warn(message, meta);
             await waitForLogs();
 
             // Then
             expect(output.length).toBeGreaterThan(0);
             const logOutput = JSON.parse(output[0]) as {
-                context: { severity: string };
                 level: string;
+                meta: { severity: string };
                 msg: string;
             };
             expect(logOutput.level).toBe('warn');
             expect(logOutput.msg).toBe(message);
-            expect(logOutput.context).toEqual({ severity: 'high' });
+            expect(logOutput.meta).toEqual({ severity: 'high' });
         });
 
         it('should format error logs correctly', async () => {
             // Given
             const message = 'Test error message';
             const error = new Error('Test error');
-            const context = { error, userId: 456 };
+            const meta = { error, userId: 456 };
 
             // When
-            logger.error(message, context);
+            logger.error(message, meta);
             await waitForLogs();
 
             // Then
@@ -115,31 +115,31 @@ describe('PinoLoggerAdapter', () => {
             expect(logOutput.msg).toBe(message);
             expect(logOutput.error).toHaveProperty('message', 'Test error');
             expect(logOutput.error).toHaveProperty('stack');
-            expect(logOutput.context).toHaveProperty('userId', 456);
+            expect(logOutput.meta).toHaveProperty('userId', 456);
         });
 
         it('should include parent bindings in child logger output', async () => {
             // Given
             const childLogger = logger.child({ service: 'auth' });
             const message = 'Child logger message';
-            const context = { userId: 789 };
+            const meta = { userId: 789 };
 
             // When
-            childLogger.info(message, context);
+            childLogger.info(message, meta);
             await waitForLogs();
 
             // Then
             expect(output.length).toBeGreaterThan(0);
             const logOutput = JSON.parse(output[0]) as {
-                context: { userId: number };
                 level: string;
+                meta: { userId: number };
                 msg: string;
                 service: string;
             };
             expect(logOutput.level).toBe('info');
             expect(logOutput.msg).toBe(message);
             expect(logOutput.service).toBe('auth');
-            expect(logOutput.context).toEqual({ userId: 789 });
+            expect(logOutput.meta).toEqual({ userId: 789 });
         });
     });
 });

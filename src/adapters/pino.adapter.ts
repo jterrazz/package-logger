@@ -45,40 +45,59 @@ export class PinoLoggerAdapter implements LoggerPort {
         return childLogger;
     }
 
-    debug(message: string, context?: Record<string, unknown>): void {
-        this.logger.debug(this.formatContext(context), message);
+    debug(message: string, meta?: Record<string, unknown>): void {
+        this.logger.debug(this.formatMeta(meta), message);
     }
 
-    error(message: string, context?: Record<string, unknown>): void {
-        this.logger.error(this.formatContext(context), message);
+    error(message: string, meta?: Record<string, unknown>): void {
+        this.logger.error(this.formatMeta(meta), message);
     }
 
-    info(message: string, context?: Record<string, unknown>): void {
-        this.logger.info(this.formatContext(context), message);
+    info(message: string, meta?: Record<string, unknown>): void {
+        this.logger.info(this.formatMeta(meta), message);
     }
 
-    warn(message: string, context?: Record<string, unknown>): void {
-        this.logger.warn(this.formatContext(context), message);
+    warn(message: string, meta?: Record<string, unknown>): void {
+        this.logger.warn(this.formatMeta(meta), message);
     }
 
-    private formatContext(context?: Record<string, unknown>): Record<string, unknown> {
-        if (!context) return {};
+    private formatMeta(meta?: Record<string, unknown>): Record<string, unknown> {
+        if (!meta) return {};
 
-        // Format error objects specially
-        if (context.error instanceof Error) {
-            const { error, ...contextRest } = context;
+        const pretty = this.config.prettyPrint;
+
+        // Error handling remains the same but placement differs based on pretty mode
+        if (meta.error instanceof Error) {
+            const { error, ...metaRest } = meta;
+
+            if (pretty) {
+                // In pretty mode, spread the rest of meta at the root
+                return {
+                    ...metaRest,
+                    error: {
+                        ...error,
+                        message: error.message,
+                        stack: error.stack,
+                    },
+                };
+            }
+
+            // Structured mode (non-pretty): keep meta nested
             return {
-                context: contextRest,
                 error: {
                     ...error,
                     message: error.message,
                     stack: error.stack,
                 },
+                meta: metaRest,
             };
         }
 
-        return {
-            context,
-        };
+        // No error field present
+        if (pretty) {
+            return meta;
+        }
+
+        return { meta };
     }
 }

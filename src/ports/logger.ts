@@ -15,20 +15,20 @@ export interface LoggerPort {
     /**
      * Log a debug message
      */
-    debug(message: string, context?: Record<string, unknown>): void;
+    debug(message: string, meta?: Record<string, unknown>): void;
 
     /**
      * Log an error message
      */
-    error(message: string, context?: Record<string, unknown>): void;
+    error(message: string, meta?: Record<string, unknown>): void;
 
     /**
      * Log an informational message
      */
-    info(message: string, context?: Record<string, unknown>): void;
+    info(message: string, meta?: Record<string, unknown>): void;
 
     /**
      * Log a warning message
      */
-    warn(message: string, context?: Record<string, unknown>): void;
+    warn(message: string, meta?: Record<string, unknown>): void;
 }

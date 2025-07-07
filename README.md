@@ -8,7 +8,6 @@ A TypeScript-based logging utility designed with clean architecture principles, 
 - 🔌 Pluggable logging adapters
 - 💪 100% TypeScript
 - 🚀 Production-ready with no-op adapter
-- 📱 React Native compatible
 
 ## Installation
 
@@ -21,12 +20,10 @@ npm install @jterrazz/logger
 ### Basic Usage
 
 ```typescript
-import { Logger } from '@jterrazz/logger';
-import { PinoLoggerAdapter } from '@jterrazz/logger/adapters/pino';
-import { NoopLoggerAdapter } from '@jterrazz/logger/adapters/noop';
+import { Logger, PinoLoggerAdapter, NoopLoggerAdapter } from '@jterrazz/logger';
 
 // Development environment with Pino
-const devLogger = new Logger({
+const logger = new Logger({
   adapter: new PinoLoggerAdapter({
     prettyPrint: true,
     level: 'debug',
@@ -34,7 +31,7 @@ const devLogger = new Logger({
 });
 
 // Production environment with No-op
-const prodLogger = new Logger({
+const logger = new Logger({
   adapter: new NoopLoggerAdapter(),
 });
 
@@ -68,10 +65,6 @@ This package follows the hexagonal (ports and adapters) architecture:
   - `pino.adapter.ts`: Pino-based logging
   - `noop.adapter.ts`: No-operation logging
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
@@ -80,3 +73,14 @@ This project is open source and available under the [MIT License](LICENSE).
 
 - Jean-Baptiste Terrazzoni ([@jterrazz](https://github.com/jterrazz))
 - Email: contact@jterrazz.com
+
+### Metadata (`meta`) behaviour
+
+The second argument to every logging method is a `meta` object containing contextual information (e.g. `userId`, `requestId`, etc.).
+
+| Mode                                   | Shape in log output                                                                                                                                                                                  |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Pretty Print (`prettyPrint: true`)** | Keys of `meta` are **spread at the root level** of the log object for maximum readability.<br/>`logger.info('msg', { userId: 42 })` → `{ level: 'info', msg: 'msg', userId: 42 }`                    |
+| **Structured (default)**               | `meta` is kept under its own key so downstream tools (e.g. Logstash, Datadog) can ingest it easily.<br/>`logger.info('msg', { userId: 42 })` → `{ level: 'info', msg: 'msg', meta: { userId: 42 } }` |
+
+Error instances placed in `meta.error` are always formatted with `message` and `stack` properties for consistency.

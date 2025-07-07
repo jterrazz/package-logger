@@ -10,19 +10,19 @@ export class NoopLoggerAdapter implements LoggerPort {
         return this;
     }
 
-    debug(_message: string, _context?: Record<string, unknown>): void {
+    debug(_message: string, _meta?: Record<string, unknown>): void {
         // No operation
     }
 
-    error(_message: string, _context?: Record<string, unknown>): void {
+    error(_message: string, _meta?: Record<string, unknown>): void {
         // No operation
     }
 
-    info(_message: string, _context?: Record<string, unknown>): void {
+    info(_message: string, _meta?: Record<string, unknown>): void {
         // No operation
     }
 
-    warn(_message: string, _context?: Record<string, unknown>): void {
+    warn(_message: string, _meta?: Record<string, unknown>): void {
         // No operation
     }
 }
