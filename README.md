@@ -2,7 +2,7 @@
 
 # Package Logger
 
-A TypeScript-based logging utility designed with clean architecture principles, providing flexible and extensible logging capabilities for Node.js and React Native applications.
+Structured, pluggable logging for Node.js/TypeScript apps.
 
 ## Features
 
