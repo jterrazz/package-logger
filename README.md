@@ -1,3 +1,5 @@
+*Hey there – I’m Jean-Baptiste, just another developer doing weird things with code. All my projects live on [jterrazz.com](https://jterrazz.com) – complete with backstories and lessons learned. Feel free to poke around – you might just find something useful!*
+
 # Package Logger
 
 A TypeScript-based logging utility designed with clean architecture principles, providing flexible and extensible logging capabilities for Node.js and React Native applications.
