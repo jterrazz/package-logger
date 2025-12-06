@@ -1,4 +1,5 @@
-import { type LoggerPort } from '../ports/logger.js';
+// Ports
+import type { LoggerPort } from '../ports/logger.js';
 
 /**
  * No-op logger adapter that implements LoggerPort but performs no operations.

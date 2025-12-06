@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vitest } from '@jterrazz/test';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PinoLoggerAdapter } from '../pino.adapter.js';
 
@@ -10,7 +10,7 @@ describe('PinoLoggerAdapter', () => {
     beforeEach(() => {
         output = [];
         originalStdoutWrite = process.stdout.write;
-        process.stdout.write = vitest.fn((chunk: string | Uint8Array) => {
+        process.stdout.write = vi.fn((chunk: string | Uint8Array) => {
             output.push(chunk.toString());
             return true;
         });
@@ -18,12 +18,12 @@ describe('PinoLoggerAdapter', () => {
 
     afterEach(() => {
         process.stdout.write = originalStdoutWrite;
-        vitest.useRealTimers();
+        vi.useRealTimers();
     });
 
     describe('when initialized with pretty print disabled', () => {
         beforeEach(() => {
-            vitest.useFakeTimers();
+            vi.useFakeTimers();
             logger = new PinoLoggerAdapter({
                 level: 'debug',
                 prettyPrint: false,
@@ -31,7 +31,7 @@ describe('PinoLoggerAdapter', () => {
         });
 
         const waitForLogs = async () => {
-            vitest.advanceTimersByTime(100);
+            vi.advanceTimersByTime(100);
             await Promise.resolve(); // Let any pending promises resolve
         };
 

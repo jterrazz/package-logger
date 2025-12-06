@@ -2,7 +2,8 @@ import type { Colorette } from 'colorette';
 import pino from 'pino';
 import pretty from 'pino-pretty';
 
-import { type LoggerLevel, type LoggerPort } from '../ports/logger.js';
+// Ports
+import type { LoggerLevel, LoggerPort } from '../ports/logger.js';
 
 export class PinoLoggerAdapter implements LoggerPort {
     private logger: pino.Logger;

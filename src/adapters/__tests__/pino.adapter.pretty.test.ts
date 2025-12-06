@@ -1,5 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from '@jterrazz/test';
-import { vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Create spies that we can inspect after adapter calls
 const loggerSpies = {
@@ -28,7 +27,9 @@ import { PinoLoggerAdapter } from '../pino.adapter.js';
 describe('PinoLoggerAdapter (prettyPrint enabled)', () => {
     beforeEach(() => {
         // Reset call history between tests
-        Object.values(loggerSpies).forEach((spy) => spy.mockReset());
+        Object.values(loggerSpies).forEach((spy) => {
+            spy.mockReset();
+        });
     });
 
     afterEach(() => {
