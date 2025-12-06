@@ -1,15 +1,8 @@
 *Hey there – I’m Jean-Baptiste, just another developer doing weird things with code. All my projects live on [jterrazz.com](https://jterrazz.com) – complete with backstories and lessons learned. Feel free to poke around – you might just find something useful!*
 
-# Package Logger
+# @jterrazz/logger
 
-Structured, pluggable logging for Node.js/TypeScript apps.
-
-## Features
-
-- 📝 Type-safe logging interface
-- 🔌 Pluggable logging adapters
-- 💪 100% TypeScript
-- 🚀 Production-ready with no-op adapter
+Structured, type-safe logging for Node.js with pluggable adapters.
 
 ## Installation
 
@@ -19,70 +12,87 @@ npm install @jterrazz/logger
 
 ## Usage
 
-### Basic Usage
-
 ```typescript
-import { Logger, PinoLoggerAdapter, NoopLoggerAdapter } from '@jterrazz/logger';
+import { PinoLoggerAdapter } from '@jterrazz/logger';
 
-// Development environment with Pino
-const logger = new Logger({
-  adapter: new PinoLoggerAdapter({
-    prettyPrint: true,
+const logger = new PinoLoggerAdapter({
     level: 'debug',
-  }),
+    prettyPrint: true,
 });
 
-// Production environment with No-op
-const logger = new Logger({
-  adapter: new NoopLoggerAdapter(),
-});
-
-// Log messages
-logger.info('Application started');
-logger.error('An error occurred', { error: new Error('Something went wrong') });
+logger.info('Server started', { port: 3000 });
+logger.error('Request failed', { error: new Error('Connection timeout') });
 ```
 
-### Available Adapters
+### Child Loggers
 
-- **PinoLoggerAdapter**: Full-featured logging with Pino (recommended for development)
+Create scoped loggers with persistent context:
 
-  ```typescript
-  new PinoLoggerAdapter({
-    prettyPrint: true, // Enable pretty printing
-    level: 'debug', // Set minimum log level
-  });
-  ```
+```typescript
+const requestLogger = logger.child({ requestId: 'abc-123' });
+requestLogger.info('Processing request'); // Includes requestId in every log
+```
 
-- **NoopLoggerAdapter**: Zero-overhead logging (recommended for client side production)
-  ```typescript
-  new NoopLoggerAdapter();
-  ```
+## Adapters
 
-## Architecture
+### PinoLoggerAdapter
 
-This package follows the hexagonal (ports and adapters) architecture:
+Production-ready logging powered by [Pino](https://github.com/pinojs/pino).
 
-- `src/ports/`: Contains the core interfaces and types
-- `src/adapters/`: Implements various logging adapters
-  - `pino.adapter.ts`: Pino-based logging
-  - `noop.adapter.ts`: No-operation logging
+```typescript
+import { PinoLoggerAdapter } from '@jterrazz/logger';
+
+const logger = new PinoLoggerAdapter({
+    level: 'info',        // 'debug' | 'info' | 'warn' | 'error' | 'silent'
+    prettyPrint: true,    // Human-readable output for development
+    destination: stream,  // Optional custom destination stream
+});
+```
+
+### NoopLoggerAdapter
+
+Zero-overhead adapter for environments where logging should be disabled.
+
+```typescript
+import { NoopLoggerAdapter } from '@jterrazz/logger';
+
+const logger = new NoopLoggerAdapter();
+```
+
+## Metadata Behavior
+
+The optional `meta` object provides contextual information:
+
+| Mode | Output |
+|------|--------|
+| `prettyPrint: true` | Keys spread at root level for readability |
+| `prettyPrint: false` | Nested under `meta` key for structured ingestion |
+
+```typescript
+logger.info('User login', { userId: 42 });
+
+// prettyPrint: true  → { level: 'info', msg: 'User login', userId: 42 }
+// prettyPrint: false → { level: 'info', msg: 'User login', meta: { userId: 42 } }
+```
+
+Errors in `meta.error` are automatically serialized with `message` and `stack` properties.
+
+## Port Interface
+
+Use `LoggerPort` for dependency injection:
+
+```typescript
+import type { LoggerPort } from '@jterrazz/logger';
+
+class UserService {
+    constructor(private readonly logger: LoggerPort) {}
+
+    createUser(name: string) {
+        this.logger.info('Creating user', { name });
+    }
+}
+```
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE).
-
-## Author
-
-- Jean-Baptiste Terrazzoni ([@jterrazz](https://github.com/jterrazz))
-- Email: contact@jterrazz.com
-
-### Metadata (`meta`) behaviour
-
-The second argument to every logging method is a `meta` object containing contextual information (e.g. `userId`, `requestId`, etc.).
-
-| Mode                                   | Shape in log output                                                                                                                                                                                  |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Pretty Print (`prettyPrint: true`)** | Keys of `meta` are **spread at the root level** of the log object for maximum readability.<br/>`logger.info('msg', { userId: 42 })` → `{ level: 'info', msg: 'msg', userId: 42 }`                    |
-| **Structured (default)**               | `meta` is kept under its own key so downstream tools (e.g. Logstash, Datadog) can ingest it easily.<br/>`logger.info('msg', { userId: 42 })` → `{ level: 'info', msg: 'msg', meta: { userId: 42 } }` |
-
-Error instances placed in `meta.error` are always formatted with `message` and `stack` properties for consistency.
+MIT
