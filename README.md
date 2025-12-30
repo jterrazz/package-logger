@@ -1,4 +1,4 @@
-*Hey there – I’m Jean-Baptiste, just another developer doing weird things with code. All my projects live on [jterrazz.com](https://jterrazz.com) – complete with backstories and lessons learned. Feel free to poke around – you might just find something useful!*
+_Hey there – I’m Jean-Baptiste, just another developer doing weird things with code. All my projects live on [jterrazz.com](https://jterrazz.com) – complete with backstories and lessons learned. Feel free to poke around – you might just find something useful!_
 
 # @jterrazz/logger
 
@@ -63,9 +63,9 @@ const logger = new NoopLoggerAdapter();
 
 The optional `meta` object provides contextual information:
 
-| Mode | Output |
-|------|--------|
-| `prettyPrint: true` | Keys spread at root level for readability |
+| Mode                 | Output                                           |
+| -------------------- | ------------------------------------------------ |
+| `prettyPrint: true`  | Keys spread at root level for readability        |
 | `prettyPrint: false` | Nested under `meta` key for structured ingestion |
 
 ```typescript

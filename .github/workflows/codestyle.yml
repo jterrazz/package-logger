@@ -1,4 +1,4 @@
-name: Quality
+name: Codestyle
 
 on:
   push:
@@ -10,6 +10,6 @@ permissions:
   contents: read
 
 jobs:
-  quality:
-    name: Quality
-    uses: ./.github/workflows/base-quality.yml
+  codestyle:
+    name: Codestyle
+    uses: ./.github/workflows/base-codestyle.yml
