@@ -16,7 +16,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "ts-build",
+    "build": "typescript build lib",
     "lint": "codestyle",
     "lint:fix": "codestyle --fix",
     "test": "vitest"
