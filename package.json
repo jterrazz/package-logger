@@ -23,7 +23,7 @@
     "build": "typescript bundle",
     "lint": "codestyle check",
     "lint:fix": "codestyle fix",
-    "test": "vitest"
+    "test": "vitest --run"
   },
   "dependencies": {
     "pino": "^10.3.1",

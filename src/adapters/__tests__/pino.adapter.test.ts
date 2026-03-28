@@ -119,7 +119,7 @@ describe("PinoLoggerAdapter", () => {
     });
 
     test("should include parent bindings in child logger output", async () => {
-      // Given
+      // Given — child logger with service binding
       const childLogger = logger.child({ service: "auth" });
       const message = "Child logger message";
       const meta = { userId: 789 };
@@ -128,7 +128,7 @@ describe("PinoLoggerAdapter", () => {
       childLogger.info(message, meta);
       await waitForLogs();
 
-      // Then
+      // Then — output includes parent bindings
       expect(output.length).toBeGreaterThan(0);
       const logOutput = JSON.parse(output[0]) as {
         level: string;
@@ -140,6 +140,52 @@ describe("PinoLoggerAdapter", () => {
       expect(logOutput.msg).toBe(message);
       expect(logOutput.service).toBe("auth");
       expect(logOutput.meta).toEqual({ userId: 789 });
+    });
+
+    test("should log without metadata", async () => {
+      // Given — message with no meta
+      const message = "No metadata";
+
+      // When
+      logger.info(message);
+      await waitForLogs();
+
+      // Then — output has no meta key
+      expect(output.length).toBeGreaterThan(0);
+      const logOutput = JSON.parse(output[0]) as Record<string, unknown>;
+      expect(logOutput.msg).toBe(message);
+      expect(logOutput.meta).toBeUndefined();
+    });
+
+    test("should log with empty metadata", async () => {
+      // Given — message with empty meta object
+      const message = "Empty metadata";
+
+      // When
+      logger.info(message, {});
+      await waitForLogs();
+
+      // Then — output has empty meta
+      expect(output.length).toBeGreaterThan(0);
+      const logOutput = JSON.parse(output[0]) as Record<string, unknown>;
+      expect(logOutput.msg).toBe(message);
+      expect(logOutput.meta).toEqual({});
+    });
+
+    test("should chain multiple child loggers", async () => {
+      // Given — nested child loggers
+      const child1 = logger.child({ service: "api" });
+      const child2 = child1.child({ requestId: "abc-123" });
+
+      // When
+      child2.info("Nested child");
+      await waitForLogs();
+
+      // Then — output includes all parent bindings
+      expect(output.length).toBeGreaterThan(0);
+      const logOutput = JSON.parse(output[0]) as Record<string, unknown>;
+      expect(logOutput.service).toBe("api");
+      expect(logOutput.requestId).toBe("abc-123");
     });
   });
 });
