@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
+import { PinoLoggerAdapter } from "../pino.adapter.js";
+
 // Create spies that we can inspect after adapter calls
 const loggerSpies = {
   debug: vi.fn(),
@@ -17,8 +19,6 @@ vi.mock("pino", () => {
     })),
   };
 });
-
-import { PinoLoggerAdapter } from "../pino.adapter.js";
 
 /**
  * Tests specifically for pretty-print mode.

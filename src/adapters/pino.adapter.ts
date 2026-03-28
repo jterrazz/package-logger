@@ -7,14 +7,18 @@ import type { LoggerLevel, LoggerPort } from "../ports/logger.js";
 
 export class PinoLoggerAdapter implements LoggerPort {
   private logger: pino.Logger;
+  private readonly config: {
+    destination?: pino.DestinationStream;
+    level: LoggerLevel;
+    prettyPrint: boolean;
+  };
 
-  constructor(
-    private readonly config: {
-      destination?: pino.DestinationStream;
-      level: LoggerLevel;
-      prettyPrint: boolean;
-    },
-  ) {
+  constructor(config: {
+    destination?: pino.DestinationStream;
+    level: LoggerLevel;
+    prettyPrint: boolean;
+  }) {
+    this.config = config;
     // Configure destination stream
     const destination: pino.DestinationStream | undefined = this.config.prettyPrint
       ? pretty({
@@ -95,13 +99,13 @@ export class PinoLoggerAdapter implements LoggerPort {
       return {};
     }
 
-    const pretty = this.config.prettyPrint;
+    const isPretty = this.config.prettyPrint;
 
     // Error handling remains the same but placement differs based on pretty mode
     if (meta.error instanceof Error) {
       const { error, ...metaRest } = meta;
 
-      if (pretty) {
+      if (isPretty) {
         // In pretty mode, spread the rest of meta at the root
         return {
           ...metaRest,
@@ -125,7 +129,7 @@ export class PinoLoggerAdapter implements LoggerPort {
     }
 
     // No error field present
-    if (pretty) {
+    if (isPretty) {
       return meta;
     }
 
