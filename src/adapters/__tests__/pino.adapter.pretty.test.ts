@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 // Create spies that we can inspect after adapter calls
 const loggerSpies = {
@@ -42,7 +42,7 @@ describe("PinoLoggerAdapter (prettyPrint enabled)", () => {
       prettyPrint: true,
     });
 
-  it("should spread simple metadata at the root level", () => {
+  test("should spread simple metadata at the root level", () => {
     // Given
     const adapter = createAdapter();
     const meta = { feature: "test", userId: 123 };
@@ -60,7 +60,7 @@ describe("PinoLoggerAdapter (prettyPrint enabled)", () => {
     expect(payload.meta).toBeUndefined();
   });
 
-  it("should spread metadata and still format error objects", () => {
+  test("should spread metadata and still format error objects", () => {
     // Given
     const adapter = createAdapter();
     const error = new Error("Pretty error");

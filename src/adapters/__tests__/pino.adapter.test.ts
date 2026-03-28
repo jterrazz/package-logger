@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { PinoLoggerAdapter } from "../pino.adapter.js";
 
@@ -35,7 +35,7 @@ describe("PinoLoggerAdapter", () => {
       await Promise.resolve(); // Let any pending promises resolve
     };
 
-    it("should format debug logs correctly", async () => {
+    test("should format debug logs correctly", async () => {
       // Given
       const message = "Test debug message";
       const meta = { userId: 123 };
@@ -56,7 +56,7 @@ describe("PinoLoggerAdapter", () => {
       expect(logOutput.meta).toEqual({ userId: 123 });
     });
 
-    it("should format info logs correctly", async () => {
+    test("should format info logs correctly", async () => {
       // Given
       const message = "Test info message";
       const meta = { action: "create" };
@@ -77,7 +77,7 @@ describe("PinoLoggerAdapter", () => {
       expect(logOutput.meta).toEqual({ action: "create" });
     });
 
-    it("should format warn logs correctly", async () => {
+    test("should format warn logs correctly", async () => {
       // Given
       const message = "Test warning message";
       const meta = { severity: "high" };
@@ -98,7 +98,7 @@ describe("PinoLoggerAdapter", () => {
       expect(logOutput.meta).toEqual({ severity: "high" });
     });
 
-    it("should format error logs correctly", async () => {
+    test("should format error logs correctly", async () => {
       // Given
       const message = "Test error message";
       const error = new Error("Test error");
@@ -118,7 +118,7 @@ describe("PinoLoggerAdapter", () => {
       expect(logOutput.meta).toHaveProperty("userId", 456);
     });
 
-    it("should include parent bindings in child logger output", async () => {
+    test("should include parent bindings in child logger output", async () => {
       // Given
       const childLogger = logger.child({ service: "auth" });
       const message = "Child logger message";

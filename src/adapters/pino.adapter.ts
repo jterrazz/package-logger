@@ -91,7 +91,9 @@ export class PinoLoggerAdapter implements LoggerPort {
   }
 
   private formatMeta(meta?: Record<string, unknown>): Record<string, unknown> {
-    if (!meta) return {};
+    if (!meta) {
+      return {};
+    }
 
     const pretty = this.config.prettyPrint;
 
