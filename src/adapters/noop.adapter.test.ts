@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { NoopLoggerAdapter } from "../noop.adapter.js";
+import { NoopLoggerAdapter } from "./noop.adapter.js";
 
 describe("NoopLoggerAdapter", () => {
   test("does not throw on debug", () => {

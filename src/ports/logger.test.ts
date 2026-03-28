@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { LoggerLevelSchema } from "../logger.js";
+import { LoggerLevelSchema } from "./logger.js";
 
 describe("LoggerLevelSchema", () => {
   test("accepts debug level", () => {

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-import { PinoLoggerAdapter } from "../pino.adapter.js";
+import { PinoLoggerAdapter } from "./pino.adapter.js";
 
 describe("PinoLoggerAdapter", () => {
   let logger: PinoLoggerAdapter;
