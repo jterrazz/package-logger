@@ -1,6 +1,6 @@
 ---
 name: jterrazz-logger
-description: Structured, type-safe logging for the @jterrazz ecosystem — defines how all projects log. Activates when configuring logging, creating child loggers, or implementing custom log adapters.
+description: Use when adding or configuring logging. Covers structured JSON logging with pino, child loggers, log levels, and custom adapters via @jterrazz/logger.
 ---
 
 # @jterrazz/logger
